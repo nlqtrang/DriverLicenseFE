@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react';
-import { ToastContainer, toast } from 'react-toastify';
-import instance from '../utils/index';
-import 'react-toastify/dist/ReactToastify.css';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import 'tailwindcss/tailwind.css';
+import React, { useState, useEffect } from "react";
+import { ToastContainer, toast } from "react-toastify";
+import instance from "../utils/index";
+import "react-toastify/dist/ReactToastify.css";
+import "bootstrap/dist/css/bootstrap.min.css";
+import "tailwindcss/tailwind.css";
 
 const Question = ({ data, questionIndex, handleAnswer, selectedAnswer }) => {
   return (
@@ -14,7 +14,7 @@ const Question = ({ data, questionIndex, handleAnswer, selectedAnswer }) => {
           <button
             key={option._id}
             className={`btn btn-outline-primary w-full text-left ${
-              selectedAnswer === optionIndex ? 'btn-primary text-white' : ''
+              selectedAnswer === optionIndex ? "btn-primary text-white" : ""
             }`}
             onClick={() => handleAnswer(questionIndex, optionIndex)}
           >
@@ -34,11 +34,11 @@ const TakeTestPage = () => {
   useEffect(() => {
     const fetchQuestions = async () => {
       try {
-        const response = await instance.get('questions/random');
+        const response = await instance.get("questions/random");
         setQuestions(response.data);
         setAnswers(Array(response.data.length).fill(null));
       } catch (error) {
-        console.error('Error fetching questions:', error);
+        console.error("Error fetching questions:", error);
       }
     };
 
@@ -61,18 +61,19 @@ const TakeTestPage = () => {
 
   const handleAnswer = (questionIndex, optionIndex) => {
     const newAnswers = [...answers];
-    newAnswers[questionIndex] = newAnswers[questionIndex] === optionIndex ? null : optionIndex;
+    newAnswers[questionIndex] =
+      newAnswers[questionIndex] === optionIndex ? null : optionIndex;
     setAnswers(newAnswers);
   };
 
   const handleSubmit = () => {
-    toast.success('Test submitted successfully!');
+    toast.success("Test submitted successfully!");
   };
 
   const formatTime = (seconds) => {
     const minutes = Math.floor(seconds / 60);
     const secs = seconds % 60;
-    return `${minutes}:${secs < 10 ? '0' : ''}${secs}`;
+    return `${minutes}:${secs < 10 ? "0" : ""}${secs}`;
   };
 
   return (
@@ -99,10 +100,12 @@ const TakeTestPage = () => {
               <button
                 key={question._id}
                 className={`btn ${
-                  answers[index] !== null ? 'btn-success' : 'btn-secondary'
+                  answers[index] !== null ? "btn-success" : "btn-secondary"
                 }`}
                 onClick={() => {
-                  document.getElementById(`question-${index}`).scrollIntoView({ behavior: 'smooth' });
+                  document
+                    .getElementById(`question-${index}`)
+                    .scrollIntoView({ behavior: "smooth" });
                 }}
               >
                 {index + 1}

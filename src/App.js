@@ -1,10 +1,11 @@
-import React from 'react';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import LoginPage from './pages/LoginPage';
-import RegisterPage from './pages/RegisterPage';
-import HomePage from './pages/HomePage';
-import ProfilePage from './pages/ProfilePage';
-import TakeTestPage from './pages/TakeTestPage';
+import React from "react";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import LoginPage from "./pages/LoginPage";
+import RegisterPage from "./pages/RegisterPage";
+import HomePage from "./pages/HomePage";
+import ProfilePage from "./pages/ProfilePage";
+import TakeTestPage from "./pages/TakeTestPage";
+import BankQuestionsPage from "./pages/BankQuestionsPage";
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
         <Route path="/" element={<HomePage />} />
         <Route path="/profile" element={<ProfilePage />} />
         <Route path="/take-test" element={<TakeTestPage />} />
+        <Route path="/view-bank-question" element={<BankQuestionsPage />} />
         <Route path="*" element={<div>404 Not Found</div>} />
       </Routes>
     </Router>
