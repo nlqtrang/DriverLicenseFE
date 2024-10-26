@@ -1,19 +1,19 @@
 // utils/apiBase.js
-import axios from 'axios';
+import axios from "axios";
 
-const API_BASE_URL = 'http://localhost:8002/api';
+const API_BASE_URL = "http://localhost:8002/api";
 
 const instance = axios.create({
   baseURL: API_BASE_URL,
   headers: {
-    'Content-Type': 'application/json',
+    "Content-Type": "application/json",
   },
 });
 
 instance.interceptors.request.use(
   (config) => {
     // Do something before sending the request, e.g., add auth token
-    const token = localStorage.getItem('accessToken');
+    const token = localStorage.getItem("accessToken");
     if (token) {
       config.headers.Authorization = `${token}`;
     }
