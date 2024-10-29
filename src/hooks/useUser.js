@@ -9,7 +9,6 @@ const useUser = () => {
       try {
         const {data} = await instance.get('/auth/verifytoken');
         setUser(data.data);
-        console.log(data.data);
         
       } catch {
         setUser(null); // Nếu có lỗi, không cần xử lý thêm, chỉ cần giữ user là null

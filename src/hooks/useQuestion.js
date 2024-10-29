@@ -5,7 +5,7 @@ import { handleResponse } from "../utils/request";
 export const useQuestion = () => {
   const [questions, setQuestions] = useState(null);
 
-  const getALlQuestions = async () => {
+  const getAllQuestions = async () => {
     try {
       const { data } = await instance.get("/questions");
       setQuestions(data.data);
@@ -19,7 +19,7 @@ export const useQuestion = () => {
     try {
       const { data } = await instance.put(`/questions/${questionId}`, question);
       handleResponse(data);
-      getALlQuestions();
+      getAllQuestions();
     } catch {
       notification.error({
         message: "Hệ thống đang gặp lỗi, vui lòng thử lại sau",
@@ -40,7 +40,7 @@ export const useQuestion = () => {
     try {
       const { data } = await instance.delete(`/questions/${questionId}`);
       handleResponse(data);
-      getALlQuestions();
+      getAllQuestions();
     } catch {
       notification.error({
         message: "Hệ thống đang gặp lỗi, vui lòng thử lại sau",
@@ -49,7 +49,7 @@ export const useQuestion = () => {
   };
   return {
     questions,
-    getALlQuestions,
+    getAllQuestions,
     updateQuestion,
     createQuestion,
     deleteQuestion,

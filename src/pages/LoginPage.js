@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import instance from "../utils/index";
-import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "bootstrap/dist/css/bootstrap.min.css";
+import { handleResponse } from "../utils/request";
+import { notification } from "antd";
 
 const LoginPage = () => {
   const [username, setUsername] = useState("");
@@ -17,16 +18,13 @@ const LoginPage = () => {
         password,
       });
       const { resultCode, message, data: token } = response.data;
-      if (resultCode === 0) {
-        //set accessToken to local storage
-        localStorage.setItem("accessToken", token);
-        toast.success(message);
-        setTimeout(() => navigate("/profile"), 2000);
-      } else {
-        toast.error(message);
-      }
+      localStorage.setItem("accessToken", token);
+      handleResponse(response.data);
+      navigate("/profile");
     } catch (error) {
-      toast.error("Đăng nhập thất bại");
+      notification.error({
+        message: "Hệ thống đang gặp lỗi, vui lòng thử lại sau",
+      });
     }
   };
 
@@ -53,7 +51,6 @@ const LoginPage = () => {
         <h2 style={{ textAlign: "center", marginBottom: "1.5rem" }}>
           Welcome Back!
         </h2>
-        <ToastContainer position="top-center" autoClose={2000} />
         <form
           onSubmit={(e) => {
             e.preventDefault();

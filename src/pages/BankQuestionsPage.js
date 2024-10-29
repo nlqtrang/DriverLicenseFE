@@ -8,7 +8,7 @@ import { ConfirmModal } from "../components/ConfirmModal";
 const BankQuestionsPage = () => {
   const {
     questions,
-    getALlQuestions,
+    getAllQuestions,
     updateQuestion,
     createQuestion,
     deleteQuestion,
@@ -38,6 +38,12 @@ const BankQuestionsPage = () => {
       // Xử lý cập nhật dữ liệu ở đây (ví dụ: gửi yêu cầu API để lưu thay đổi)
     });
   };
+
+  const handleCancelCreate = () => {
+    setIsCreateModalVisible(false);
+    createForm.resetFields();
+  }
+
   const handleCreate = () => {
     createForm.validateFields().then((values) => {
       const formattedOptions = values.options.map((option) => ({
@@ -48,7 +54,7 @@ const BankQuestionsPage = () => {
       const updatedRecord = { ...values, options: formattedOptions };
       createQuestion(updatedRecord).then(() => {
         setIsCreateModalVisible(false);
-        getALlQuestions();
+        getAllQuestions();
       });
       createForm.resetFields();
       // Thực hiện logic tạo mới (ví dụ: gọi API để lưu câu hỏi mới)
@@ -65,11 +71,11 @@ const BankQuestionsPage = () => {
     });
   };
   useEffect(() => {
-    getALlQuestions();
+    getAllQuestions();
   }, []);
   const columns = [
     {
-      title: "QuestionText",
+      title: "Question",
       dataIndex: "questionText",
       key: "questionText",
     },
@@ -138,7 +144,6 @@ const BankQuestionsPage = () => {
         }}
       >
         <h1 style={{ fontSize: 24 }}>Quản lý câu hỏi</h1>
-        <p>Tạo và quản lý các vai trò, phân quyền cho các vai trò</p>
       </Card>
       <Card
         style={{
@@ -224,7 +229,7 @@ const BankQuestionsPage = () => {
       <Modal
         title="Add New Question"
         visible={isCreateModalVisible}
-        onCancel={handleCancel}
+        onCancel={handleCancelCreate}
         onOk={handleCreate}
       >
         <Form form={createForm} layout="vertical">

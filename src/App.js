@@ -6,6 +6,8 @@ import HomePage from "./pages/HomePage";
 import ProfilePage from "./pages/ProfilePage";
 import TakeTestPage from "./pages/TakeTestPage";
 import BankQuestionsPage from "./pages/BankQuestionsPage";
+import TestDetailPage from "./pages/TestDetailPage";
+import TestHistoryPage from "./pages/TestHistoryPage";
 
 function App() {
   return (
@@ -17,6 +19,8 @@ function App() {
         <Route path="/profile" element={<ProfilePage />} />
         <Route path="/take-test" element={<TakeTestPage />} />
         <Route path="/view-bank-question" element={<BankQuestionsPage />} />
+        <Route path="/test-result-detail" element={<TestDetailPage />} />
+        <Route path="/test-history" element={<TestHistoryPage />} />
         <Route path="*" element={<div>404 Not Found</div>} />
       </Routes>
     </Router>
