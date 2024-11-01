@@ -14,7 +14,6 @@ import AccessDeniedPage from "./pages/AccessDeniedPage";
 import useUser from "./hooks/useUser";
 
 function App() {
-  const token = localStorage.getItem("accessToken"); // Lấy token từ localStorage
   const user = useUser();// Lấy role từ localStorage, bạn nên lưu khi người dùng đăng nhập
 
   // Tạo ProtectedRoute hiển thị header và kiểm tra token
@@ -29,6 +28,8 @@ function App() {
 
   // Tạo AdminRoute để bảo vệ các route dành cho admin
   const AdminRoute = () => {
+    if (!user)
+      return (<div>loading ...</div>)
     return user?.role === "admin" ? (
       <>
         <AppHeader />
@@ -47,7 +48,7 @@ function App() {
         <Route path="/register" element={<RegisterPage />} />
 
         {/* Điều hướng người dùng đã đăng nhập từ "/" đến "/profile" */}
-        <Route path="/" element={token ? <Navigate to="/profile" /> : <HomePage />} />
+        <Route path="/" element={user ? <Navigate to="/profile" /> : <HomePage />} />
 
         {/* Các trang cần header */}
         <Route element={<ProtectedRoute />}>

@@ -2,7 +2,7 @@ import { React, useEffect, useState } from "react";
 import "react-toastify/dist/ReactToastify.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import useQuestion from "../hooks/useQuestion";
-import { Table, Tag, Card, Button, Form, Modal, Input, Checkbox } from "antd";
+import { Table, Tag, Card, Button, Form, Modal, Input, Checkbox, notification } from "antd";
 import { FormOutlined, EditOutlined, DeleteOutlined } from "@ant-design/icons";
 import { ConfirmModal } from "../components/ConfirmModal";
 const BankQuestionsPage = () => {
@@ -31,13 +31,25 @@ const BankQuestionsPage = () => {
   };
 
   const handleSave = () => {
-    form.validateFields().then((values) => {
-      updateQuestion(values._id, values);
-      setIsModalVisible(false);
-      form.resetFields();
-      // Xử lý cập nhật dữ liệu ở đây (ví dụ: gửi yêu cầu API để lưu thay đổi)
-    });
+    form
+      .validateFields()
+      .then((values) => {
+        updateQuestion(values._id, values);
+        setIsModalVisible(false);
+        form.resetFields();
+      })
+      .catch((errorInfo) => {
+        // Lấy thông tin lỗi từ errorFields
+        const errors = errorInfo.errorFields?.map(err => `${err.name}: ${err.errors.join(', ')}`).join('; ');
+      
+        notification.error({
+          message: 'Validation Error',
+          description: errors, // Hiển thị mô tả lỗi
+        });
+      });
+      
   };
+  
 
   const handleCancelCreate = () => {
     setIsCreateModalVisible(false);
@@ -45,21 +57,35 @@ const BankQuestionsPage = () => {
   }
 
   const handleCreate = () => {
-    createForm.validateFields().then((values) => {
-      const formattedOptions = values.options.map((option) => ({
-        ...option,
-        isCorrect: option.isCorrect || false, // Đảm bảo giá trị là false nếu không được tích
-      }));
-
-      const updatedRecord = { ...values, options: formattedOptions };
-      createQuestion(updatedRecord).then(() => {
-        setIsCreateModalVisible(false);
-        getAllQuestions();
+    createForm
+      .validateFields()
+      .then((values) => {
+        const formattedOptions = values.options ? values.options.map((option) => ({
+          ...option,
+          isCorrect: option.isCorrect || false, // Đảm bảo giá trị là false nếu không được tích
+        })): null;
+  
+        const updatedRecord = { ...values, options: formattedOptions };
+        createQuestion(updatedRecord).then(() => {
+          setIsCreateModalVisible(false);
+          getAllQuestions();
+        });
+        createForm.resetFields();
+      })
+      .catch((errorInfo) => {
+        // Lấy thông tin lỗi từ errorFields
+        // const errors = errorInfo.errorFields?.map(err => `${err.name}: ${err.errors.join(', ')}`).join('; ');
+        // const error = errorInfo.errorFields[0].errors[0];
+        //lấy lỗi  thứ nhất
+        const error = errorInfo.errorFields[0].errors[0];
+        notification.error({
+          message: 'Validation Error',
+          description: "heloo", // Hiển thị mô tả lỗi
+        });
       });
-      createForm.resetFields();
-      // Thực hiện logic tạo mới (ví dụ: gọi API để lưu câu hỏi mới)
-    });
+      
   };
+  
   const handleDelete = (questionId) => {
     ConfirmModal({
       title: "Bạn có chắc muốn xóa không",
@@ -85,15 +111,15 @@ const BankQuestionsPage = () => {
       key: "options",
       render: (options) => (
         <>
-          {options.map((option) => (
+          {options && options.length > 0 ? options.map((option) => (
             <div key={option._id}>
               <Tag color={option.isCorrect ? "green" : "volcano"}>
                 {option.text}
               </Tag>
             </div>
-          ))}
+          )) : <Tag color="red">Chưa có đáp án</Tag>}
         </>
-      ),
+      )
     },
     {
       key: "action",
@@ -171,7 +197,7 @@ const BankQuestionsPage = () => {
       </Card>
       <Modal
         title="Edit Record"
-        visible={isModalVisible}
+        open={isModalVisible}
         onCancel={handleCancel}
         onOk={handleSave}
       >
@@ -189,7 +215,7 @@ const BankQuestionsPage = () => {
           <Form.List name="options">
             {(fields) => (
               <>
-                {fields.map(({ key, name, ...restField }) => (
+                {fields?.map(({ key, name, ...restField }) => (
                   <div
                     key={key}
                     style={{
@@ -228,7 +254,7 @@ const BankQuestionsPage = () => {
       </Modal>
       <Modal
         title="Add New Question"
-        visible={isCreateModalVisible}
+        open={isCreateModalVisible}
         onCancel={handleCancelCreate}
         onOk={handleCreate}
       >
@@ -244,7 +270,7 @@ const BankQuestionsPage = () => {
           <Form.List name="options">
             {(fields, { add, remove }) => (
               <>
-                {fields.map(({ key, name, ...restField }) => (
+                {fields?.map(({ key, name, ...restField }) => (
                   <div
                     key={key}
                     style={{
